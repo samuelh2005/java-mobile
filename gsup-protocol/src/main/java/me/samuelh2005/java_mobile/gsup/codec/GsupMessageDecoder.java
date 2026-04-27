@@ -9,7 +9,7 @@ import java.util.List;
 import me.samuelh2005.java_mobile.gsup.GsupMessage;
 import me.samuelh2005.java_mobile.gsup.IpaFrame;
 import me.samuelh2005.java_mobile.gsup.ieis.IEI;
-import me.samuelh2005.java_mobile.gsup.ieis.TestIEI;
+import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
 
 public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> {
 
@@ -37,7 +37,7 @@ public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> 
 
             byte[] value = new byte[len];
             in.readBytes(value);
-            ieis.add(new TestIEI(type, value));
+            ieis.add(IEIType.create(type, value));
         }
 
         out.add(new GsupMessage(messageType, ieis.toArray(IEI[]::new)));

@@ -1,7 +1,7 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record TestIEI(int type, byte[] value) implements IEI {
-    public TestIEI {
+public record PdpInfoIEI(int type, byte[] value) implements IEI {
+    public PdpInfoIEI {
         value = value == null ? new byte[0] : value.clone();
     }
 
@@ -12,6 +12,6 @@ public record TestIEI(int type, byte[] value) implements IEI {
 
     @Override
     public String toString() {
-        return "TestIEI{type=0x%02X, len=%d}".formatted(type & 0xFF, value.length);
+        return "PdpInfoIEI{len=" + value.length + "}";
     }
 }

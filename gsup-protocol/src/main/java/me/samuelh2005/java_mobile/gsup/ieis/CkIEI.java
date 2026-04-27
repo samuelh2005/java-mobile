@@ -1,0 +1,20 @@
+package me.samuelh2005.java_mobile.gsup.ieis;
+
+public record CkIEI(int type, byte[] value) implements IEI {
+    public CkIEI {
+        if (value == null || value.length != 16) {
+            throw new IllegalArgumentException("CK must be 16 bytes");
+        }
+        value = value.clone();
+    }
+
+    @Override
+    public byte[] value() {
+        return value.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "CkIEI{len=" + value.length + "}";
+    }
+}
