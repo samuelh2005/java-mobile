@@ -23,7 +23,7 @@ public class GsupClient {
 
     private volatile Channel channel;
 
-    public GsupClient() {
+    public GsupClient(GsupHandler handler) {
         bootstrap.group(ioGroup)
                  .channel(NioSocketChannel.class)
                  .option(ChannelOption.TCP_NODELAY, true)
@@ -36,6 +36,7 @@ public class GsupClient {
                          p.addLast(new IpaFrameEncoder());
                          p.addLast(new GsupMessageDecoder());
                          p.addLast(new GsupMessageEncoder());
+                         p.addLast(new GsupMessageHandlerAdapter(handler));
                      }
                  });
     }
