@@ -12,6 +12,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import me.samuelh2005.java_mobile.gsup.codec.GsupMessageDecoder;
+import me.samuelh2005.java_mobile.gsup.codec.GsupMessageEncoder;
+import me.samuelh2005.java_mobile.gsup.codec.IpaFrameDecoder;
+import me.samuelh2005.java_mobile.gsup.codec.IpaFrameEncoder;
 
 public class GsupClient {
     private final EventLoopGroup ioGroup = new NioEventLoopGroup(1); // one channel, one session
@@ -28,10 +32,10 @@ public class GsupClient {
                      @Override
                      protected void initChannel(SocketChannel ch) {
                          ChannelPipeline p = ch.pipeline();
-                        //  p.addLast(new IpaFrameDecoder());
-                        //  p.addLast(new IpaFrameEncoder());
-                        //  p.addLast(new GsupMessageDecoder());
-                        //  p.addLast(new GsupMessageEncoder());
+                         p.addLast(new IpaFrameDecoder());
+                         p.addLast(new IpaFrameEncoder());
+                         p.addLast(new GsupMessageDecoder());
+                         p.addLast(new GsupMessageEncoder());
                      }
                  });
     }
@@ -51,12 +55,12 @@ public class GsupClient {
         ioGroup.next().schedule(() -> connect(host, port), 5, TimeUnit.SECONDS);
     }
 
-    // public void send(GsupMessage msg) {
-    //     Channel ch = channel;
-    //     if (ch != null && ch.isActive()) {
-    //         ch.writeAndFlush(msg);
-    //     }
-    // }
+    public void send(GsupMessage msg) {
+        Channel ch = channel;
+        if (ch != null && ch.isActive()) {
+            ch.writeAndFlush(msg);
+        }
+    }
 
     public void shutdown() {
         ioGroup.shutdownGracefully();
