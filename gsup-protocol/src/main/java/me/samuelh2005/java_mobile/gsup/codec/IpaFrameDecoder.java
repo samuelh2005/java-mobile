@@ -20,6 +20,7 @@ public final class IpaFrameDecoder extends ByteToMessageDecoder {
             in.markReaderIndex();
             int payloadLen = in.readUnsignedShort(); // big-endian
             int streamId = in.readUnsignedByte();
+            int proto = in.readUnsignedByte();
 
             if (in.readableBytes() < payloadLen) {
                 in.resetReaderIndex();
@@ -27,7 +28,7 @@ public final class IpaFrameDecoder extends ByteToMessageDecoder {
             }
 
             ByteBuf payload = in.readRetainedSlice(payloadLen);
-            out.add(new IpaFrame(streamId, payload));
+            out.add(new IpaFrame(streamId, proto, payload));
         }
     }
 }

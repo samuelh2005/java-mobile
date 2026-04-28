@@ -12,13 +12,15 @@ import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
 public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessage> {
 
     private final int streamId;
+    private final int proto;
 
     public GsupMessageEncoder() {
-        this(0xEE);
+        this(0xEE, 0x05);
     }
 
-    public GsupMessageEncoder(int streamId) {
+    public GsupMessageEncoder(int streamId, int proto) {
         this.streamId = streamId & 0xFF;
+        this.proto = proto & 0xFF;
     }
 
     @Override
@@ -46,6 +48,6 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
             payload.writeBytes(value);
         }
 
-        out.add(new IpaFrame(streamId, payload));
+        out.add(new IpaFrame(streamId, proto, payload));
     }
 }

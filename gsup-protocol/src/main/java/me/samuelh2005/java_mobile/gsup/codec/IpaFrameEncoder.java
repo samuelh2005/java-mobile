@@ -11,6 +11,7 @@ public final class IpaFrameEncoder extends MessageToByteEncoder<IpaFrame> {
         int len = msg.payload().readableBytes();
         out.writeShort(len);
         out.writeByte(msg.streamId());
+        out.writeByte(msg.proto());
         out.writeBytes(msg.payload(), msg.payload().readerIndex(), len);
     }
 }
