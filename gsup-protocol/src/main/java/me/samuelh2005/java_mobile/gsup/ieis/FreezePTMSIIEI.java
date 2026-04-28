@@ -5,11 +5,7 @@ public final class FreezePTMSIIEI {
         return new FreezePTMSIIEI();
     }
 
-    public static FreezePTMSIIEI encode() {
-        return new FreezePTMSIIEI();
-    }
-
-    public byte[] toBytes() {
+    public static byte[] encode(FreezePTMSIIEI iei) {
         return new byte[0];
     }
 

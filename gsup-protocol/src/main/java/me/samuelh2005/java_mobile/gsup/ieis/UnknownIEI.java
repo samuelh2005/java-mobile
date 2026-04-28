@@ -9,8 +9,8 @@ public record UnknownIEI(int type, byte[] value) {
         return new UnknownIEI(type, value);
     }
 
-    public byte[] encode() {
-        return value.clone();
+    public static byte[] encode(UnknownIEI iei) {
+        return iei.value.clone();
     }
 
     public String toString() {

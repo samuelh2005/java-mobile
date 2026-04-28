@@ -12,12 +12,8 @@ public record ResIEI(byte[] data) {
         return new ResIEI(data);
     }
 
-    public static ResIEI encode(byte[] data) {
-        return new ResIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(ResIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

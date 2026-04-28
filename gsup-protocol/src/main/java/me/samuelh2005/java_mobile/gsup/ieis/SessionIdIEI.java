@@ -9,11 +9,8 @@ public record SessionIdIEI(int sessionId) {
         return new SessionIdIEI(id);
     }
 
-    public static SessionIdIEI encode(int sessionId) {
-        return new SessionIdIEI(sessionId);
-    }
-
-    public byte[] toBytes() {
+    public static byte[] encode(SessionIdIEI iei) {
+        int sessionId = iei.sessionId();
         return new byte[] {
             (byte) ((sessionId >> 24) & 0xFF),
             (byte) ((sessionId >> 16) & 0xFF),

@@ -19,8 +19,6 @@ public final class ImeiCheckResultIEI {
         }
     }
 
-    public static final int CODE = 0x51;
-
     private final Type value;
 
     public ImeiCheckResultIEI(Type value) {
@@ -31,16 +29,8 @@ public final class ImeiCheckResultIEI {
         return new ImeiCheckResultIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static ImeiCheckResultIEI encode(Type result) {
-        return new ImeiCheckResultIEI(result);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(ImeiCheckResultIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

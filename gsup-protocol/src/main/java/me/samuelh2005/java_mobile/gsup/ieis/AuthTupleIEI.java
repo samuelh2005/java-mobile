@@ -9,12 +9,8 @@ public record AuthTupleIEI(byte[] data) {
         return new AuthTupleIEI(data);
     }
 
-    public static AuthTupleIEI encode(byte[] data) {
-        return new AuthTupleIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(AuthTupleIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

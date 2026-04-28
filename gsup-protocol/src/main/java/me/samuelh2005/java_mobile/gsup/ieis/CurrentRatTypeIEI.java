@@ -20,8 +20,6 @@ public final class CurrentRatTypeIEI {
         }
     }
 
-    public static final int CODE = 0x2a;
-
     private final Type value;
 
     public CurrentRatTypeIEI(Type value) {
@@ -32,16 +30,8 @@ public final class CurrentRatTypeIEI {
         return new CurrentRatTypeIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static CurrentRatTypeIEI encode(Type type) {
-        return new CurrentRatTypeIEI(type);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(CurrentRatTypeIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

@@ -24,11 +24,10 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
     @Override
     protected void encode(ChannelHandlerContext ctx, GsupMessage msg, List<Object> out) {
         Object[] ieis = msg.ieis() == null ? new Object[0] : msg.ieis();
-        int[] codes = msg.codes();
 
         int size = 1;
         for (Object iei : ieis) {
-            byte[] value = IEIType.encode(codes[0], iei);
+            byte[] value = IEIType.encode(iei);
             int len = value.length;
             if (len > 255) {
                 throw new EncoderException("GSUP IE too long (max 255)");
@@ -39,9 +38,10 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
         ByteBuf payload = ctx.alloc().buffer(size);
         payload.writeByte(msg.messageType() & 0xFF);
 
-        for (int i = 0; i < ieis.length; i++) {
-            byte[] value = IEIType.encode(codes[i], ieis[i]);
-            payload.writeByte(codes[i] & 0xFF);
+        for (Object iei : ieis) {
+            int code = IEIType.codeOf(iei);
+            byte[] value = IEIType.encode(iei);
+            payload.writeByte(code);
             payload.writeByte(value.length);
             payload.writeBytes(value);
         }

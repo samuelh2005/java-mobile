@@ -21,7 +21,6 @@ public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> 
 
         int messageType = in.readUnsignedByte();
         List<Object> ieis = new ArrayList<>();
-        List<Integer> codes = new ArrayList<>();
 
         while (in.isReadable()) {
             if (in.readableBytes() < 2) {
@@ -38,9 +37,8 @@ public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> 
             byte[] value = new byte[len];
             in.readBytes(value);
             ieis.add(IEIType.decode(code, value));
-            codes.add(code);
         }
 
-        out.add(new GsupMessage(messageType, ieis.toArray(), codes.stream().mapToInt(Integer::intValue).toArray()));
+        out.add(new GsupMessage(messageType, ieis.toArray()));
     }
 }

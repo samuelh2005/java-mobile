@@ -9,12 +9,8 @@ public record SmRpDaIEI(byte[] data) {
         return new SmRpDaIEI(data);
     }
 
-    public static SmRpDaIEI encode(byte[] data) {
-        return new SmRpDaIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(SmRpDaIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

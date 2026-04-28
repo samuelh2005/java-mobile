@@ -5,12 +5,8 @@ public record SmRpMrIEI(int messageReference) {
         return new SmRpMrIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public static SmRpMrIEI encode(int messageReference) {
-        return new SmRpMrIEI(messageReference);
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) messageReference};
+    public static byte[] encode(SmRpMrIEI iei) {
+        return new byte[] {(byte) iei.messageReference()};
     }
 
     public String toString() {

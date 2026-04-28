@@ -9,12 +9,8 @@ public record PcoIEI(byte[] data) {
         return new PcoIEI(data);
     }
 
-    public static PcoIEI encode(byte[] data) {
-        return new PcoIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(PcoIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

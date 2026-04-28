@@ -16,19 +16,8 @@ public record HlrNumberIEI(String number) {
         return new HlrNumberIEI(sb.toString());
     }
 
-    public static HlrNumberIEI encode(String number) {
-        if (number == null || number.isEmpty()) {
-            return new HlrNumberIEI("");
-        }
-        String digits = number.replaceAll("[^0-9]", "");
-        byte[] result = new byte[digits.length()];
-        for (int i = 0; i < digits.length(); i++) {
-            result[i] = (byte) (digits.charAt(i) - '0');
-        }
-        return decode(result);
-    }
-
-    public byte[] toBytes() {
+    public static byte[] encode(HlrNumberIEI iei) {
+        String number = iei.number();
         if (number == null || number.isEmpty()) {
             return new byte[0];
         }

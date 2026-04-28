@@ -12,12 +12,8 @@ public record AutsIEI(byte[] data) {
         return new AutsIEI(data);
     }
 
-    public static AutsIEI encode(byte[] data) {
-        return new AutsIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(AutsIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

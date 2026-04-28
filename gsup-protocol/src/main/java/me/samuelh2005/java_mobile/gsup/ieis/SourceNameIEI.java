@@ -9,12 +9,8 @@ public record SourceNameIEI(String name) {
         return new SourceNameIEI(data == null ? "" : new String(data));
     }
 
-    public static SourceNameIEI encode(String name) {
-        return new SourceNameIEI(name);
-    }
-
-    public byte[] toBytes() {
-        return name.getBytes();
+    public static byte[] encode(SourceNameIEI iei) {
+        return iei.name.getBytes();
     }
 
     public String toString() {

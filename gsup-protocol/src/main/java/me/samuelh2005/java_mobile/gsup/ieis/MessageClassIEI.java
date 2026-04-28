@@ -19,8 +19,6 @@ public final class MessageClassIEI {
         }
     }
 
-    public static final int CODE = 0x0a;
-
     private final Type value;
 
     public MessageClassIEI(Type value) {
@@ -31,16 +29,8 @@ public final class MessageClassIEI {
         return new MessageClassIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static MessageClassIEI encode(Type messageClass) {
-        return new MessageClassIEI(messageClass);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(MessageClassIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

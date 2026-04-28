@@ -5,11 +5,7 @@ public final class PdpInfoCompleteIEI {
         return new PdpInfoCompleteIEI();
     }
 
-    public static PdpInfoCompleteIEI encode() {
-        return new PdpInfoCompleteIEI();
-    }
-
-    public byte[] toBytes() {
+    public static byte[] encode(PdpInfoCompleteIEI iei) {
         return new byte[0];
     }
 

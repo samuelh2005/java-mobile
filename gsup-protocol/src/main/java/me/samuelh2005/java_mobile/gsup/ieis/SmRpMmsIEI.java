@@ -19,8 +19,6 @@ public final class SmRpMmsIEI {
         }
     }
 
-    public static final int CODE = 0x45;
-
     private final Type value;
 
     public SmRpMmsIEI(Type value) {
@@ -31,16 +29,8 @@ public final class SmRpMmsIEI {
         return new SmRpMmsIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static SmRpMmsIEI encode(Type mms) {
-        return new SmRpMmsIEI(mms);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(SmRpMmsIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

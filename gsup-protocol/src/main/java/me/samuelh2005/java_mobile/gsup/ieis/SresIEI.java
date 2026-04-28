@@ -12,12 +12,8 @@ public record SresIEI(byte[] data) {
         return new SresIEI(data);
     }
 
-    public static SresIEI encode(byte[] data) {
-        return new SresIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(SresIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

@@ -19,8 +19,6 @@ public final class CnDomainIEI {
         }
     }
 
-    public static final int CODE = 0x28;
-
     private final Type value;
 
     public CnDomainIEI(Type value) {
@@ -31,16 +29,8 @@ public final class CnDomainIEI {
         return new CnDomainIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static CnDomainIEI encode(Type domain) {
-        return new CnDomainIEI(domain);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(CnDomainIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

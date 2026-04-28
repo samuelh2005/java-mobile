@@ -9,12 +9,8 @@ public record SupplementaryServiceInfoIEI(byte[] data) {
         return new SupplementaryServiceInfoIEI(data);
     }
 
-    public static SupplementaryServiceInfoIEI encode(byte[] data) {
-        return new SupplementaryServiceInfoIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(SupplementaryServiceInfoIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

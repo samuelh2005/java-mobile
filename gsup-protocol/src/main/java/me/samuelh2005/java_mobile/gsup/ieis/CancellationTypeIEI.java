@@ -5,12 +5,8 @@ public record CancellationTypeIEI(int cancelType) {
         return new CancellationTypeIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public static CancellationTypeIEI encode(int cancelType) {
-        return new CancellationTypeIEI(cancelType);
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) cancelType};
+    public static byte[] encode(CancellationTypeIEI iei) {
+        return new byte[] {(byte) iei.cancelType()};
     }
 
     public String toString() {

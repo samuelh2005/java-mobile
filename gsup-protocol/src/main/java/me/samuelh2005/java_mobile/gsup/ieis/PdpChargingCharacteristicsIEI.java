@@ -9,12 +9,8 @@ public record PdpChargingCharacteristicsIEI(byte[] data) {
         return new PdpChargingCharacteristicsIEI(data);
     }
 
-    public static PdpChargingCharacteristicsIEI encode(byte[] data) {
-        return new PdpChargingCharacteristicsIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(PdpChargingCharacteristicsIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

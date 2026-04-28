@@ -16,19 +16,8 @@ public record ImeiIEI(String imei) {
         return new ImeiIEI(sb.toString());
     }
 
-    public static ImeiIEI encode(String imei) {
-        if (imei == null || imei.isEmpty()) {
-            return new ImeiIEI("");
-        }
-        String digits = imei.replaceAll("[^0-9]", "");
-        byte[] result = new byte[digits.length()];
-        for (int i = 0; i < digits.length(); i++) {
-            result[i] = (byte) (digits.charAt(i) - '0');
-        }
-        return decode(result);
-    }
-
-    public byte[] toBytes() {
+    public static byte[] encode(ImeiIEI iei) {
+        String imei = iei.imei();
         if (imei == null || imei.isEmpty()) {
             return new byte[0];
         }

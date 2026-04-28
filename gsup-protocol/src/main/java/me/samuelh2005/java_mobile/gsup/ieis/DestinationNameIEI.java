@@ -9,12 +9,8 @@ public record DestinationNameIEI(String name) {
         return new DestinationNameIEI(data == null ? "" : new String(data));
     }
 
-    public static DestinationNameIEI encode(String name) {
-        return new DestinationNameIEI(name);
-    }
-
-    public byte[] toBytes() {
-        return name.getBytes();
+    public static byte[] encode(DestinationNameIEI iei) {
+        return iei.name().getBytes();
     }
 
     public String toString() {

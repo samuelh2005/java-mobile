@@ -21,8 +21,6 @@ public final class SessionStateIEI {
         }
     }
 
-    public static final int CODE = 0x31;
-
     private final Type value;
 
     public SessionStateIEI(Type value) {
@@ -33,16 +31,8 @@ public final class SessionStateIEI {
         return new SessionStateIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static SessionStateIEI encode(Type state) {
-        return new SessionStateIEI(state);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(SessionStateIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

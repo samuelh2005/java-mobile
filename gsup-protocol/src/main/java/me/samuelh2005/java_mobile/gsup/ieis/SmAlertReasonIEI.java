@@ -19,8 +19,6 @@ public final class SmAlertReasonIEI {
         }
     }
 
-    public static final int CODE = 0x46;
-
     private final Type value;
 
     public SmAlertReasonIEI(Type value) {
@@ -31,16 +29,8 @@ public final class SmAlertReasonIEI {
         return new SmAlertReasonIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public static SmAlertReasonIEI encode(Type reason) {
-        return new SmAlertReasonIEI(reason);
-    }
-
-    public Type value() {
-        return value;
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) value.value};
+    public static byte[] encode(SmAlertReasonIEI iei) {
+        return new byte[] {(byte) iei.value.value};
     }
 
     public String toString() {

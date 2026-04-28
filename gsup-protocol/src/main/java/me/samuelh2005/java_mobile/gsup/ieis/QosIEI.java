@@ -9,12 +9,8 @@ public record QosIEI(byte[] data) {
         return new QosIEI(data);
     }
 
-    public static QosIEI encode(byte[] data) {
-        return new QosIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(QosIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

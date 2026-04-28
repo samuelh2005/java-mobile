@@ -9,12 +9,8 @@ public record AnApduIEI(byte[] data) {
         return new AnApduIEI(data);
     }
 
-    public static AnApduIEI encode(byte[] data) {
-        return new AnApduIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(AnApduIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

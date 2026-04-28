@@ -5,12 +5,8 @@ public record BssapCauseIEI(int cause) {
         return new BssapCauseIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public static BssapCauseIEI encode(int cause) {
-        return new BssapCauseIEI(cause);
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) cause};
+    public static byte[] encode(BssapCauseIEI iei) {
+        return new byte[] {(byte) iei.cause()};
     }
 
     public String toString() {

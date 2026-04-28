@@ -9,12 +9,8 @@ public record PdpInfoIEI(byte[] data) {
         return new PdpInfoIEI(data);
     }
 
-    public static PdpInfoIEI encode(byte[] data) {
-        return new PdpInfoIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(PdpInfoIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

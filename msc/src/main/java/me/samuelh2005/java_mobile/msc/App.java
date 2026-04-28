@@ -7,7 +7,6 @@ import me.samuelh2005.java_mobile.gsup.GsupHandler;
 import me.samuelh2005.java_mobile.gsup.GsupMessage;
 import me.samuelh2005.java_mobile.gsup.ieis.ImsiIEI;
 import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
-import me.samuelh2005.java_mobile.gsup.codec.GsupMessageEncoder;
 
 public class App implements GsupHandler {
     
@@ -51,10 +50,10 @@ public class App implements GsupHandler {
         
         if (type == 0x03) {
             Object[] ieis = msg.ieis();
-            int[] codes = msg.codes();
             for (int i = 0; i < ieis.length; i++) {
-                System.out.println("  IEI: 0x" + Integer.toHexString(codes[i]) + 
-                    " value=" + bytesToHex(IEIType.encode(codes[i], ieis[i])));
+                int code = IEIType.codeOf(ieis[i]);
+                System.out.println("  IEI: 0x" + Integer.toHexString(code) + 
+                    " value=" + bytesToHex(IEIType.encode(ieis[i])));
             }
         }
     }
@@ -77,14 +76,10 @@ public class App implements GsupHandler {
     private void sendSendAuthenticationInfo() {
         String imsi = "001010123456789";
         
-        Object[] ieis = new Object[] {
-            ImsiIEI.encode(imsi)
-        };
-        int[] codes = new int[] {
-            ImsiIEI.CODE
-        };
+        ImsiIEI imsiIEI = new ImsiIEI(imsi);
+        Object[] ieis = new Object[] { imsiIEI };
         
-        GsupMessage authRequest = new GsupMessage(0x02, ieis, codes);
+        GsupMessage authRequest = new GsupMessage(0x02, ieis);
         
         client.send(authRequest);
         

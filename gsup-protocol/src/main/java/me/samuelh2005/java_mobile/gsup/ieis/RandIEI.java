@@ -12,12 +12,8 @@ public record RandIEI(byte[] data) {
         return new RandIEI(data);
     }
 
-    public static RandIEI encode(byte[] data) {
-        return new RandIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(RandIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {

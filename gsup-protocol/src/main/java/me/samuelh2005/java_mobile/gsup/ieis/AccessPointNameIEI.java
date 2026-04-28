@@ -9,12 +9,8 @@ public record AccessPointNameIEI(String apn) {
         return new AccessPointNameIEI(data == null ? "" : new String(data));
     }
 
-    public static AccessPointNameIEI encode(String apn) {
-        return new AccessPointNameIEI(apn);
-    }
-
-    public byte[] toBytes() {
-        return apn.getBytes();
+    public static byte[] encode(AccessPointNameIEI iei) {
+        return iei.apn().getBytes();
     }
 
     public String toString() {

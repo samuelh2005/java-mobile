@@ -5,12 +5,8 @@ public record SmRpCauseIEI(int cause) {
         return new SmRpCauseIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public static SmRpCauseIEI encode(int cause) {
-        return new SmRpCauseIEI(cause);
-    }
-
-    public byte[] toBytes() {
-        return new byte[] {(byte) cause};
+    public static byte[] encode(SmRpCauseIEI iei) {
+        return new byte[] {(byte) iei.cause()};
     }
 
     public String toString() {

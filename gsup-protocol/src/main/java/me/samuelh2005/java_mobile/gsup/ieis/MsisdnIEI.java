@@ -1,8 +1,6 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
 public record MsisdnIEI(String value) {
-    public static final int CODE = 0x08;
-
     public MsisdnIEI {
         value = value == null ? "" : value;
     }
@@ -18,23 +16,11 @@ public record MsisdnIEI(String value) {
         return new MsisdnIEI(sb.toString());
     }
 
-    public static MsisdnIEI encode(String msisdn) {
-        if (msisdn == null || msisdn.isEmpty()) {
-            return new MsisdnIEI("");
-        }
-        String digits = msisdn.replaceAll("[^0-9]", "");
-        byte[] result = new byte[digits.length()];
-        for (int i = 0; i < digits.length(); i++) {
-            result[i] = (byte) (digits.charAt(i) - '0');
-        }
-        return decode(result);
-    }
-
-    public byte[] toBytes() {
-        if (value == null || value.isEmpty()) {
+    public static byte[] encode(MsisdnIEI iei) {
+        if (iei.value == null || iei.value.isEmpty()) {
             return new byte[0];
         }
-        String digits = value.replaceAll("[^0-9]", "");
+        String digits = iei.value.replaceAll("[^0-9]", "");
         byte[] result = new byte[digits.length()];
         for (int i = 0; i < digits.length(); i++) {
             result[i] = (byte) (digits.charAt(i) - '0');

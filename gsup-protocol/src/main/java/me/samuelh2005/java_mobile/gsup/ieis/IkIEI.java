@@ -12,12 +12,8 @@ public record IkIEI(byte[] data) {
         return new IkIEI(data);
     }
 
-    public static IkIEI encode(byte[] data) {
-        return new IkIEI(data);
-    }
-
-    public byte[] toBytes() {
-        return data.clone();
+    public static byte[] encode(IkIEI iei) {
+        return iei.data().clone();
     }
 
     public String toString() {
