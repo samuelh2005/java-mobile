@@ -46,8 +46,18 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
             payload.writeByte(code);
             payload.writeByte(value.length);
             payload.writeBytes(value);
+
+            System.out.println("Encoding IEI 0x" + Integer.toHexString(code) + " len=" + value.length + " data=" + bytesToHex(value));
         }
 
         out.add(new IpaFrame(streamId, proto, payload));
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+        return sb.toString();
     }
 }

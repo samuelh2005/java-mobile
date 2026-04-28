@@ -26,11 +26,16 @@ public final class ImeiCheckResultIEI {
     }
 
     public static ImeiCheckResultIEI decode(byte[] data) {
-        return new ImeiCheckResultIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
+        if (data == null || data.length < 1) {
+            return new ImeiCheckResultIEI(Type.ACK);
+        }
+        int wireValue = data[0] & 0xFF;
+        return new ImeiCheckResultIEI(Type.fromValue(wireValue + 1));
     }
 
     public static byte[] encode(ImeiCheckResultIEI iei) {
-        return new byte[] {(byte) iei.value.value};
+        int wireValue = iei.value.value - 1;
+        return new byte[] {(byte) wireValue};
     }
 
     public String toString() {

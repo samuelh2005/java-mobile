@@ -52,6 +52,8 @@ public final class IEIType {
     public static final IEIType BSSAP_CAUSE = register(0x64, "BSSAPCause", BssapCauseIEI::decode, iei -> BssapCauseIEI.encode((BssapCauseIEI) iei), BssapCauseIEI.class);
     public static final IEIType SESSION_MANAGEMENT_CAUSE = register(0x65, "SessionManagementCause", SessionManagementCauseIEI::decode, iei -> SessionManagementCauseIEI.encode((SessionManagementCauseIEI) iei), SessionManagementCauseIEI.class);
     public static final IEIType CURRENT_RAT_TYPE = register(0x2a, "CurrentRATType", CurrentRatTypeIEI::decode, iei -> CurrentRatTypeIEI.encode((CurrentRatTypeIEI) iei), CurrentRatTypeIEI.class);
+    public static final IEIType SUPPORTED_RAT_TYPES = register(0x29, "SupportedRatTypes", SupportedRatTypesIEI::decode, iei -> SupportedRatTypesIEI.encode((SupportedRatTypesIEI) iei), SupportedRatTypesIEI.class);
+    public static final IEIType NUM_VECTORS_REQ = register(0x52, "NumVectorsReq", NumVectorsReqIEI::decode, iei -> NumVectorsReqIEI.encode((NumVectorsReqIEI) iei), NumVectorsReqIEI.class);
 
     public final int code;
     public final String name;

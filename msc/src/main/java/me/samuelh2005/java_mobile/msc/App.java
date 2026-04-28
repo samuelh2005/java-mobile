@@ -79,7 +79,7 @@ public class App implements GsupHandler {
         ImsiIEI imsiIEI = new ImsiIEI(imsi);
         Object[] ieis = new Object[] { imsiIEI };
         
-        GsupMessage authRequest = new GsupMessage(0x02, ieis);
+        GsupMessage authRequest = new GsupMessage(0x08, ieis);
         
         client.send(authRequest);
         

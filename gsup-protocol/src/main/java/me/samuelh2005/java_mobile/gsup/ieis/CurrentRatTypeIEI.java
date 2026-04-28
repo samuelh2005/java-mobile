@@ -2,6 +2,7 @@ package me.samuelh2005.java_mobile.gsup.ieis;
 
 public final class CurrentRatTypeIEI {
     public enum Type {
+        UNKNOWN(0x00),
         GERAN(0x01),
         UTRAN(0x02),
         EUTRAN(0x03);
@@ -16,7 +17,7 @@ public final class CurrentRatTypeIEI {
             for (Type r : values()) {
                 if (r.value == value) return r;
             }
-            return GERAN;
+            return UNKNOWN;
         }
     }
 
