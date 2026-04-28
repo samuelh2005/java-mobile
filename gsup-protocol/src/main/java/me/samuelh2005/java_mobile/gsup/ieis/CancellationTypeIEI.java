@@ -1,25 +1,19 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record CancellationTypeIEI(int type, byte[] value) implements IEI {
-    public CancellationTypeIEI {
-        value = value == null ? new byte[0] : value.clone();
+public record CancellationTypeIEI(int cancelType) {
+    public static CancellationTypeIEI decode(byte[] data) {
+        return new CancellationTypeIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public CancellationTypeIEI(int cancelType) {
-        this(0x06, new byte[] {(byte) cancelType});
+    public static CancellationTypeIEI encode(int cancelType) {
+        return new CancellationTypeIEI(cancelType);
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public byte[] toBytes() {
+        return new byte[] {(byte) cancelType};
     }
 
-    public int cancellationType() {
-        return value.length > 0 ? value[0] & 0xFF : 0;
-    }
-
-    @Override
     public String toString() {
-        return "CancellationTypeIEI{type=" + cancellationType() + "}";
+        return "CancellationTypeIEI{type=" + cancelType + "}";
     }
 }

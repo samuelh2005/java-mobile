@@ -1,20 +1,26 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record AutnIEI(int type, byte[] value) implements IEI {
+public record AutnIEI(byte[] data) {
     public AutnIEI {
-        if (value == null || value.length != 16) {
+        if (data == null || data.length != 16) {
             throw new IllegalArgumentException("AUTN must be 16 bytes");
         }
-        value = value.clone();
+        data = data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static AutnIEI decode(byte[] data) {
+        return new AutnIEI(data);
     }
 
-    @Override
+    public static AutnIEI encode(byte[] data) {
+        return new AutnIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "AutnIEI{len=" + value.length + "}";
+        return "AutnIEI{len=" + data.length + "}";
     }
 }

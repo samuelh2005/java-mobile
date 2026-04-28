@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record QosIEI(int type, byte[] value) implements IEI {
+public record QosIEI(byte[] data) {
     public QosIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static QosIEI decode(byte[] data) {
+        return new QosIEI(data);
     }
 
-    @Override
+    public static QosIEI encode(byte[] data) {
+        return new QosIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "QosIEI{len=" + value.length + "}";
+        return "QosIEI{len=" + data.length + "}";
     }
 }

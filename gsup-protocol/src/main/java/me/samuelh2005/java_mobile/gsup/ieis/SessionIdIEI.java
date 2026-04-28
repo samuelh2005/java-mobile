@@ -1,33 +1,28 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record SessionIdIEI(int type, byte[] value) implements IEI {
-    public SessionIdIEI {
-        if (value == null || value.length != 4) {
-            throw new IllegalArgumentException("Session ID must be 4 bytes");
+public record SessionIdIEI(int sessionId) {
+    public static SessionIdIEI decode(byte[] data) {
+        if (data == null || data.length != 4) {
+            return new SessionIdIEI(0);
         }
-        value = value.clone();
+        int id = ((data[0] & 0xFF) << 24) | ((data[1] & 0xFF) << 16) | ((data[2] & 0xFF) << 8) | (data[3] & 0xFF);
+        return new SessionIdIEI(id);
     }
 
-    public SessionIdIEI(int sessionId) {
-        this(0x30, new byte[] {
+    public static SessionIdIEI encode(int sessionId) {
+        return new SessionIdIEI(sessionId);
+    }
+
+    public byte[] toBytes() {
+        return new byte[] {
             (byte) ((sessionId >> 24) & 0xFF),
             (byte) ((sessionId >> 16) & 0xFF),
             (byte) ((sessionId >> 8) & 0xFF),
             (byte) (sessionId & 0xFF)
-        });
+        };
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
-    }
-
-    public int sessionId() {
-        return ((value[0] & 0xFF) << 24) | ((value[1] & 0xFF) << 16) | ((value[2] & 0xFF) << 8) | (value[3] & 0xFF);
-    }
-
-    @Override
     public String toString() {
-        return "SessionIdIEI{id=" + sessionId() + "}";
+        return "SessionIdIEI{id=" + sessionId + "}";
     }
 }

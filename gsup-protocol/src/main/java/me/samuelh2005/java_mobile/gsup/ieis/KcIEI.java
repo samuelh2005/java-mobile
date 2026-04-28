@@ -1,20 +1,26 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record KcIEI(int type, byte[] value) implements IEI {
+public record KcIEI(byte[] data) {
     public KcIEI {
-        if (value == null || value.length != 8) {
+        if (data == null || data.length != 8) {
             throw new IllegalArgumentException("Kc must be 8 bytes");
         }
-        value = value.clone();
+        data = data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static KcIEI decode(byte[] data) {
+        return new KcIEI(data);
     }
 
-    @Override
+    public static KcIEI encode(byte[] data) {
+        return new KcIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "KcIEI{len=" + value.length + "}";
+        return "KcIEI{len=" + data.length + "}";
     }
 }

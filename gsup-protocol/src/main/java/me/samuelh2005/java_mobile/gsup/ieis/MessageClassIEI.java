@@ -1,25 +1,49 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record MessageClassIEI(int type, byte[] value) implements IEI {
-    public MessageClassIEI {
-        value = value == null ? new byte[0] : value.clone();
+public final class MessageClassIEI {
+    public enum Type {
+        BSSAP(0x01),
+        RANAP(0x02);
+
+        public final int value;
+
+        Type(int value) {
+            this.value = value;
+        }
+
+        public static Type fromValue(int value) {
+            for (Type m : values()) {
+                if (m.value == value) return m;
+            }
+            return BSSAP;
+        }
     }
 
-    public MessageClassIEI(int msgClass) {
-        this(0x0a, new byte[] {(byte) msgClass});
+    public static final int CODE = 0x0a;
+
+    private final Type value;
+
+    public MessageClassIEI(Type value) {
+        this.value = value;
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static MessageClassIEI decode(byte[] data) {
+        return new MessageClassIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public int messageClass() {
-        return value.length > 0 ? value[0] & 0xFF : 0;
+    public static MessageClassIEI encode(Type messageClass) {
+        return new MessageClassIEI(messageClass);
     }
 
-    @Override
+    public Type value() {
+        return value;
+    }
+
+    public byte[] toBytes() {
+        return new byte[] {(byte) value.value};
+    }
+
     public String toString() {
-        return "MessageClassIEI{class=" + messageClass() + "}";
+        return "MessageClassIEI{" + value + "}";
     }
 }

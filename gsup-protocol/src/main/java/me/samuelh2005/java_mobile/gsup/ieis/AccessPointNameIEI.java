@@ -1,25 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record AccessPointNameIEI(int type, byte[] value) implements IEI {
+public record AccessPointNameIEI(String apn) {
     public AccessPointNameIEI {
-        value = value == null ? new byte[0] : value.clone();
+        apn = apn == null ? "" : apn;
     }
 
-    public AccessPointNameIEI(String apn) {
-        this(0x12, apn.getBytes());
+    public static AccessPointNameIEI decode(byte[] data) {
+        return new AccessPointNameIEI(data == null ? "" : new String(data));
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static AccessPointNameIEI encode(String apn) {
+        return new AccessPointNameIEI(apn);
     }
 
-    public String apn() {
-        return new String(value);
+    public byte[] toBytes() {
+        return apn.getBytes();
     }
 
-    @Override
     public String toString() {
-        return "AccessPointNameIEI{apn=" + apn() + "}";
+        return "AccessPointNameIEI{apn=" + apn + "}";
     }
 }

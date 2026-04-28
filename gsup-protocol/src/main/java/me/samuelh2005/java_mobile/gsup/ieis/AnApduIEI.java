@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record AnApduIEI(int type, byte[] value) implements IEI {
+public record AnApduIEI(byte[] data) {
     public AnApduIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static AnApduIEI decode(byte[] data) {
+        return new AnApduIEI(data);
     }
 
-    @Override
+    public static AnApduIEI encode(byte[] data) {
+        return new AnApduIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "AnApduIEI{len=" + value.length + "}";
+        return "AnApduIEI{len=" + data.length + "}";
     }
 }

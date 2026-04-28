@@ -1,11 +1,18 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record PdpInfoCompleteIEI(int type, byte[] value) implements IEI {
-    public PdpInfoCompleteIEI {
-        value = new byte[0];
+public final class PdpInfoCompleteIEI {
+    public static PdpInfoCompleteIEI decode(byte[] data) {
+        return new PdpInfoCompleteIEI();
     }
 
-    @Override
+    public static PdpInfoCompleteIEI encode() {
+        return new PdpInfoCompleteIEI();
+    }
+
+    public byte[] toBytes() {
+        return new byte[0];
+    }
+
     public String toString() {
         return "PdpInfoCompleteIEI{}";
     }

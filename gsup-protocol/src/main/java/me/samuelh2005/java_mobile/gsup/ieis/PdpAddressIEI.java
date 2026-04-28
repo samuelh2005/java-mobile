@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record PdpAddressIEI(int type, byte[] value) implements IEI {
+public record PdpAddressIEI(byte[] data) {
     public PdpAddressIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static PdpAddressIEI decode(byte[] data) {
+        return new PdpAddressIEI(data);
     }
 
-    @Override
+    public static PdpAddressIEI encode(byte[] data) {
+        return new PdpAddressIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "PdpAddressIEI{len=" + value.length + "}";
+        return "PdpAddressIEI{len=" + data.length + "}";
     }
 }

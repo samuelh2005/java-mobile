@@ -1,25 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record DestinationNameIEI(int type, byte[] value) implements IEI {
+public record DestinationNameIEI(String name) {
     public DestinationNameIEI {
-        value = value == null ? new byte[0] : value.clone();
+        name = name == null ? "" : name;
     }
 
-    public DestinationNameIEI(String name) {
-        this(0x61, name.getBytes());
+    public static DestinationNameIEI decode(byte[] data) {
+        return new DestinationNameIEI(data == null ? "" : new String(data));
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static DestinationNameIEI encode(String name) {
+        return new DestinationNameIEI(name);
     }
 
-    public String name() {
-        return new String(value);
+    public byte[] toBytes() {
+        return name.getBytes();
     }
 
-    @Override
     public String toString() {
-        return "DestinationNameIEI{name=" + name() + "}";
+        return "DestinationNameIEI{name=" + name + "}";
     }
 }

@@ -1,24 +1,38 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record HlrNumberIEI(int type, byte[] value) implements IEI {
+public record HlrNumberIEI(String number) {
     public HlrNumberIEI {
-        value = value == null ? new byte[0] : value.clone();
+        number = number == null ? "" : number;
     }
 
-    public HlrNumberIEI(String number) {
-        this(0x09, encodeDigits(number));
+    public static HlrNumberIEI decode(byte[] data) {
+        if (data == null || data.length == 0) {
+            return new HlrNumberIEI("");
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte b : data) {
+            sb.append(b & 0x0F);
+        }
+        return new HlrNumberIEI(sb.toString());
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static HlrNumberIEI encode(String number) {
+        if (number == null || number.isEmpty()) {
+            return new HlrNumberIEI("");
+        }
+        String digits = number.replaceAll("[^0-9]", "");
+        byte[] result = new byte[digits.length()];
+        for (int i = 0; i < digits.length(); i++) {
+            result[i] = (byte) (digits.charAt(i) - '0');
+        }
+        return decode(result);
     }
 
-    private static byte[] encodeDigits(String s) {
-        if (s == null || s.isEmpty()) {
+    public byte[] toBytes() {
+        if (number == null || number.isEmpty()) {
             return new byte[0];
         }
-        String digits = s.replaceAll("[^0-9]", "");
+        String digits = number.replaceAll("[^0-9]", "");
         byte[] result = new byte[digits.length()];
         for (int i = 0; i < digits.length(); i++) {
             result[i] = (byte) (digits.charAt(i) - '0');
@@ -26,19 +40,7 @@ public record HlrNumberIEI(int type, byte[] value) implements IEI {
         return result;
     }
 
-    public String number() {
-        if (value == null || value.length == 0) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (byte b : value) {
-            sb.append(b & 0x0F);
-        }
-        return sb.toString();
-    }
-
-    @Override
     public String toString() {
-        return "HlrNumberIEI{number=" + number() + "}";
+        return "HlrNumberIEI{number=" + number + "}";
     }
 }

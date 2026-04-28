@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record SmRpUiIEI(int type, byte[] value) implements IEI {
+public record SmRpUiIEI(byte[] data) {
     public SmRpUiIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static SmRpUiIEI decode(byte[] data) {
+        return new SmRpUiIEI(data);
     }
 
-    @Override
+    public static SmRpUiIEI encode(byte[] data) {
+        return new SmRpUiIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "SmRpUiIEI{len=" + value.length + "}";
+        return "SmRpUiIEI{len=" + data.length + "}";
     }
 }

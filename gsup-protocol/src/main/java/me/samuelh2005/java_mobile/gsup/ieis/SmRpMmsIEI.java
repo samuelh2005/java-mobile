@@ -1,25 +1,49 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record SmRpMmsIEI(int type, byte[] value) implements IEI {
-    public SmRpMmsIEI {
-        value = value == null ? new byte[0] : value.clone();
+public final class SmRpMmsIEI {
+    public enum Type {
+        MORE_MESSAGES(0x01),
+        NO_MORE_MESSAGES(0x00);
+
+        public final int value;
+
+        Type(int value) {
+            this.value = value;
+        }
+
+        public static Type fromValue(int value) {
+            for (Type m : values()) {
+                if (m.value == value) return m;
+            }
+            return NO_MORE_MESSAGES;
+        }
     }
 
-    public SmRpMmsIEI(int mms) {
-        this(0x45, new byte[] {(byte) mms});
+    public static final int CODE = 0x45;
+
+    private final Type value;
+
+    public SmRpMmsIEI(Type value) {
+        this.value = value;
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static SmRpMmsIEI decode(byte[] data) {
+        return new SmRpMmsIEI(Type.fromValue(data != null && data.length > 0 ? data[0] & 0xFF : 0));
     }
 
-    public int mms() {
-        return value.length > 0 ? value[0] & 0xFF : 0;
+    public static SmRpMmsIEI encode(Type mms) {
+        return new SmRpMmsIEI(mms);
     }
 
-    @Override
+    public Type value() {
+        return value;
+    }
+
+    public byte[] toBytes() {
+        return new byte[] {(byte) value.value};
+    }
+
     public String toString() {
-        return "SmRpMmsIEI{mms=" + mms() + "}";
+        return "SmRpMmsIEI{" + value + "}";
     }
 }

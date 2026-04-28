@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record AuthTupleIEI(int type, byte[] value) implements IEI {
+public record AuthTupleIEI(byte[] data) {
     public AuthTupleIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static AuthTupleIEI decode(byte[] data) {
+        return new AuthTupleIEI(data);
     }
 
-    @Override
+    public static AuthTupleIEI encode(byte[] data) {
+        return new AuthTupleIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "AuthTupleIEI{len=" + value.length + "}";
+        return "AuthTupleIEI{len=" + data.length + "}";
     }
 }

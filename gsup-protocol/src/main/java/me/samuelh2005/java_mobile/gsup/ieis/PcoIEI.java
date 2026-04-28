@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record PcoIEI(int type, byte[] value) implements IEI {
+public record PcoIEI(byte[] data) {
     public PcoIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static PcoIEI decode(byte[] data) {
+        return new PcoIEI(data);
     }
 
-    @Override
+    public static PcoIEI encode(byte[] data) {
+        return new PcoIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "PcoIEI{len=" + value.length + "}";
+        return "PcoIEI{len=" + data.length + "}";
     }
 }

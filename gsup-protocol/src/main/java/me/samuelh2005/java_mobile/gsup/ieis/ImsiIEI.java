@@ -1,24 +1,40 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record ImsiIEI(int type, byte[] value) implements IEI {
+public record ImsiIEI(String value) {
+    public static final int CODE = 0x01;
+
     public ImsiIEI {
-        value = value == null ? new byte[0] : value.clone();
+        value = value == null ? "" : value;
     }
 
-    public ImsiIEI(String imsi) {
-        this(0x01, encodeImsi(imsi));
+    public static ImsiIEI decode(byte[] data) {
+        if (data == null || data.length == 0) {
+            return new ImsiIEI("");
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte b : data) {
+            sb.append(b & 0x0F);
+        }
+        return new ImsiIEI(sb.toString());
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
-    }
-
-    private static byte[] encodeImsi(String imsi) {
+    public static ImsiIEI encode(String imsi) {
         if (imsi == null || imsi.isEmpty()) {
-            return new byte[0];
+            return new ImsiIEI("");
         }
         String digits = imsi.replaceAll("[^0-9]", "");
+        byte[] result = new byte[digits.length()];
+        for (int i = 0; i < digits.length(); i++) {
+            result[i] = (byte) (digits.charAt(i) - '0');
+        }
+        return decode(result);
+    }
+
+    public byte[] toBytes() {
+        if (value == null || value.isEmpty()) {
+            return new byte[0];
+        }
+        String digits = value.replaceAll("[^0-9]", "");
         byte[] result = new byte[digits.length()];
         for (int i = 0; i < digits.length(); i++) {
             result[i] = (byte) (digits.charAt(i) - '0');
@@ -26,19 +42,7 @@ public record ImsiIEI(int type, byte[] value) implements IEI {
         return result;
     }
 
-    public String imsi() {
-        if (value == null || value.length == 0) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (byte b : value) {
-            sb.append(b & 0x0F);
-        }
-        return sb.toString();
-    }
-
-    @Override
     public String toString() {
-        return "ImsiIEI{imsi=" + imsi() + "}";
+        return "ImsiIEI{imsi=" + value + "}";
     }
 }

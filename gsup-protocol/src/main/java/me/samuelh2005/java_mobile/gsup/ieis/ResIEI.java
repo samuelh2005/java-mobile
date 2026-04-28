@@ -1,20 +1,26 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record ResIEI(int type, byte[] value) implements IEI {
+public record ResIEI(byte[] data) {
     public ResIEI {
-        if (value == null) {
+        if (data == null) {
             throw new IllegalArgumentException("RES cannot be null");
         }
-        value = value.clone();
+        data = data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static ResIEI decode(byte[] data) {
+        return new ResIEI(data);
     }
 
-    @Override
+    public static ResIEI encode(byte[] data) {
+        return new ResIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "ResIEI{len=" + value.length + "}";
+        return "ResIEI{len=" + data.length + "}";
     }
 }

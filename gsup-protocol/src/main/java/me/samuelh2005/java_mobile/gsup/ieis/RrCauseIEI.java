@@ -1,25 +1,19 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record RrCauseIEI(int type, byte[] value) implements IEI {
-    public RrCauseIEI {
-        value = value == null ? new byte[0] : value.clone();
+public record RrCauseIEI(int cause) {
+    public static RrCauseIEI decode(byte[] data) {
+        return new RrCauseIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public RrCauseIEI(int cause) {
-        this(0x63, new byte[] {(byte) cause});
+    public static RrCauseIEI encode(int cause) {
+        return new RrCauseIEI(cause);
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public byte[] toBytes() {
+        return new byte[] {(byte) cause};
     }
 
-    public int cause() {
-        return value.length > 0 ? value[0] & 0xFF : 0;
-    }
-
-    @Override
     public String toString() {
-        return "RrCauseIEI{cause=" + cause() + "}";
+        return "RrCauseIEI{cause=" + cause + "}";
     }
 }

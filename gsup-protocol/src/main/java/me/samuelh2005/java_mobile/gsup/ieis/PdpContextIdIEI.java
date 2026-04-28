@@ -1,25 +1,19 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record PdpContextIdIEI(int type, byte[] value) implements IEI {
-    public PdpContextIdIEI {
-        value = value == null ? new byte[0] : value.clone();
+public record PdpContextIdIEI(int contextId) {
+    public static PdpContextIdIEI decode(byte[] data) {
+        return new PdpContextIdIEI(data != null && data.length > 0 ? data[0] & 0xFF : 0);
     }
 
-    public PdpContextIdIEI(int contextId) {
-        this(0x10, new byte[] {(byte) contextId});
+    public static PdpContextIdIEI encode(int contextId) {
+        return new PdpContextIdIEI(contextId);
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public byte[] toBytes() {
+        return new byte[] {(byte) contextId};
     }
 
-    public int contextId() {
-        return value.length > 0 ? value[0] & 0xFF : 0;
-    }
-
-    @Override
     public String toString() {
-        return "PdpContextIdIEI{id=" + contextId() + "}";
+        return "PdpContextIdIEI{id=" + contextId + "}";
     }
 }

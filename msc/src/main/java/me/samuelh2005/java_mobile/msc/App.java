@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import me.samuelh2005.java_mobile.gsup.GsupClient;
 import me.samuelh2005.java_mobile.gsup.GsupHandler;
 import me.samuelh2005.java_mobile.gsup.GsupMessage;
-import me.samuelh2005.java_mobile.gsup.ieis.IEI;
 import me.samuelh2005.java_mobile.gsup.ieis.ImsiIEI;
+import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
 import me.samuelh2005.java_mobile.gsup.codec.GsupMessageEncoder;
 
 public class App implements GsupHandler {
@@ -25,19 +25,16 @@ public class App implements GsupHandler {
         if (future.isSuccess()) {
             System.out.println("Connected to HLR");
             
-            // Wait a moment for connection to stabilize
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
             
-            // Send authentication info request
             sendSendAuthenticationInfo();
             
-            // Keep running for a bit to receive response
             try {
-                Thread.sleep(5000); // Wait 5 seconds for response
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -52,11 +49,12 @@ public class App implements GsupHandler {
         
         System.out.println("Received message type: 0x" + Integer.toHexString(type));
         
-        if (type == 0x03) { // Send Auth Info Answer
-            // Parse the response - it contains authentication vectors
-            for (IEI iei : msg.ieis()) {
-                System.out.println("  IEI: 0x" + Integer.toHexString(iei.type()) + 
-                    " value=" + bytesToHex(iei.value()));
+        if (type == 0x03) {
+            Object[] ieis = msg.ieis();
+            int[] codes = msg.codes();
+            for (int i = 0; i < ieis.length; i++) {
+                System.out.println("  IEI: 0x" + Integer.toHexString(codes[i]) + 
+                    " value=" + bytesToHex(IEIType.encode(codes[i], ieis[i])));
             }
         }
     }
@@ -77,20 +75,17 @@ public class App implements GsupHandler {
     }
     
     private void sendSendAuthenticationInfo() {
-        // IMSI of the subscriber (example: 001010123456789)
         String imsi = "001010123456789";
         
-        // Build the message:
-        // Message Type: 0x02 = Send Authentication Info Request
-        // IEIs: IMSI (type 0x01)
-        IEI[] ieis = new IEI[] {
-            new ImsiIEI(imsi)
+        Object[] ieis = new Object[] {
+            ImsiIEI.encode(imsi)
+        };
+        int[] codes = new int[] {
+            ImsiIEI.CODE
         };
         
-        // Create message with type 0x02
-        GsupMessage authRequest = new GsupMessage(0x02, ieis);
+        GsupMessage authRequest = new GsupMessage(0x02, ieis, codes);
         
-        // Send it
         client.send(authRequest);
         
         System.out.println("Sent SendAuthenticationInfo request for IMSI: 001010123456789");

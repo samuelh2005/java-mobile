@@ -7,14 +7,14 @@ import io.netty.handler.codec.EncoderException;
 import java.util.List;
 import me.samuelh2005.java_mobile.gsup.GsupMessage;
 import me.samuelh2005.java_mobile.gsup.IpaFrame;
-import me.samuelh2005.java_mobile.gsup.ieis.IEI;
+import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
 
 public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessage> {
 
     private final int streamId;
 
     public GsupMessageEncoder() {
-        this(0xEE); // Osmocom GSUP protocol stream ID over IPA
+        this(0xEE);
     }
 
     public GsupMessageEncoder(int streamId) {
@@ -23,24 +23,25 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
 
     @Override
     protected void encode(ChannelHandlerContext ctx, GsupMessage msg, List<Object> out) {
-        IEI[] ieis = msg.ieis() == null ? new IEI[0] : msg.ieis();
+        Object[] ieis = msg.ieis() == null ? new Object[0] : msg.ieis();
+        int[] codes = msg.codes();
 
-        int size = 1; // message type
-        for (IEI iei : ieis) {
-            int len = iei.value().length;
+        int size = 1;
+        for (Object iei : ieis) {
+            byte[] value = IEIType.encode(codes[0], iei);
+            int len = value.length;
             if (len > 255) {
-                throw new EncoderException("GSUP IE too long (max 255): type=0x"
-                        + Integer.toHexString(iei.type() & 0xFF));
+                throw new EncoderException("GSUP IE too long (max 255)");
             }
-            size += 2 + len; // tag + len + value
+            size += 2 + len;
         }
 
         ByteBuf payload = ctx.alloc().buffer(size);
         payload.writeByte(msg.messageType() & 0xFF);
 
-        for (IEI iei : ieis) {
-            byte[] value = iei.value();
-            payload.writeByte(iei.type() & 0xFF);
+        for (int i = 0; i < ieis.length; i++) {
+            byte[] value = IEIType.encode(codes[i], ieis[i]);
+            payload.writeByte(codes[i] & 0xFF);
             payload.writeByte(value.length);
             payload.writeBytes(value);
         }

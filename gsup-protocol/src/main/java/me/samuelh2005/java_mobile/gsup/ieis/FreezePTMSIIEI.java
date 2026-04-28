@@ -1,11 +1,18 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record FreezePTMSIIEI(int type, byte[] value) implements IEI {
-    public FreezePTMSIIEI {
-        value = new byte[0];
+public final class FreezePTMSIIEI {
+    public static FreezePTMSIIEI decode(byte[] data) {
+        return new FreezePTMSIIEI();
     }
 
-    @Override
+    public static FreezePTMSIIEI encode() {
+        return new FreezePTMSIIEI();
+    }
+
+    public byte[] toBytes() {
+        return new byte[0];
+    }
+
     public String toString() {
         return "FreezePTMSIIEI{}";
     }

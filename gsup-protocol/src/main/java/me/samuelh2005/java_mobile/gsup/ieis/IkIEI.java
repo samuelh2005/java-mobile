@@ -1,20 +1,26 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record IkIEI(int type, byte[] value) implements IEI {
+public record IkIEI(byte[] data) {
     public IkIEI {
-        if (value == null || value.length != 16) {
+        if (data == null || data.length != 16) {
             throw new IllegalArgumentException("IK must be 16 bytes");
         }
-        value = value.clone();
+        data = data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static IkIEI decode(byte[] data) {
+        return new IkIEI(data);
     }
 
-    @Override
+    public static IkIEI encode(byte[] data) {
+        return new IkIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "IkIEI{len=" + value.length + "}";
+        return "IkIEI{len=" + data.length + "}";
     }
 }

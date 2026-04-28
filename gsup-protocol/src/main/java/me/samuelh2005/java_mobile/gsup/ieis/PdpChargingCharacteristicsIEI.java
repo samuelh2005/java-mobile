@@ -1,17 +1,23 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record PdpChargingCharacteristicsIEI(int type, byte[] value) implements IEI {
+public record PdpChargingCharacteristicsIEI(byte[] data) {
     public PdpChargingCharacteristicsIEI {
-        value = value == null ? new byte[0] : value.clone();
+        data = data == null ? new byte[0] : data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static PdpChargingCharacteristicsIEI decode(byte[] data) {
+        return new PdpChargingCharacteristicsIEI(data);
     }
 
-    @Override
+    public static PdpChargingCharacteristicsIEI encode(byte[] data) {
+        return new PdpChargingCharacteristicsIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "PdpChargingCharacteristicsIEI{len=" + value.length + "}";
+        return "PdpChargingCharacteristicsIEI{len=" + data.length + "}";
     }
 }

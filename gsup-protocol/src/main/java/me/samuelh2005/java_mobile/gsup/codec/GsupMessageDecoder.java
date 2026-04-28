@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import me.samuelh2005.java_mobile.gsup.GsupMessage;
 import me.samuelh2005.java_mobile.gsup.IpaFrame;
-import me.samuelh2005.java_mobile.gsup.ieis.IEI;
 import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
 
 public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> {
@@ -21,14 +20,15 @@ public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> 
         }
 
         int messageType = in.readUnsignedByte();
-        List<IEI> ieis = new ArrayList<>();
+        List<Object> ieis = new ArrayList<>();
+        List<Integer> codes = new ArrayList<>();
 
         while (in.isReadable()) {
             if (in.readableBytes() < 2) {
                 throw new CorruptedFrameException("truncated GSUP IE header");
             }
 
-            int type = in.readUnsignedByte();
+            int code = in.readUnsignedByte();
             int len = in.readUnsignedByte();
 
             if (in.readableBytes() < len) {
@@ -37,9 +37,10 @@ public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> 
 
             byte[] value = new byte[len];
             in.readBytes(value);
-            ieis.add(IEIType.create(type, value));
+            ieis.add(IEIType.decode(code, value));
+            codes.add(code);
         }
 
-        out.add(new GsupMessage(messageType, ieis.toArray(IEI[]::new)));
+        out.add(new GsupMessage(messageType, ieis.toArray(), codes.stream().mapToInt(Integer::intValue).toArray()));
     }
 }

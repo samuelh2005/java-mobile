@@ -1,20 +1,26 @@
 package me.samuelh2005.java_mobile.gsup.ieis;
 
-public record SresIEI(int type, byte[] value) implements IEI {
+public record SresIEI(byte[] data) {
     public SresIEI {
-        if (value == null || value.length != 4) {
+        if (data == null || data.length != 4) {
             throw new IllegalArgumentException("SRES must be 4 bytes");
         }
-        value = value.clone();
+        data = data.clone();
     }
 
-    @Override
-    public byte[] value() {
-        return value.clone();
+    public static SresIEI decode(byte[] data) {
+        return new SresIEI(data);
     }
 
-    @Override
+    public static SresIEI encode(byte[] data) {
+        return new SresIEI(data);
+    }
+
+    public byte[] toBytes() {
+        return data.clone();
+    }
+
     public String toString() {
-        return "SresIEI{len=" + value.length + "}";
+        return "SresIEI{len=" + data.length + "}";
     }
 }
