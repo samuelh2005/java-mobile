@@ -12,10 +12,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import me.samuelh2005.java_mobile.gsup.codec.GsupMessageDecoder;
-import me.samuelh2005.java_mobile.gsup.codec.GsupMessageEncoder;
 import me.samuelh2005.java_mobile.gsup.codec.IpaFrameDecoder;
 import me.samuelh2005.java_mobile.gsup.codec.IpaFrameEncoder;
+import me.samuelh2005.java_mobile.gsup.codec.GsupMessageDecoder;
+import me.samuelh2005.java_mobile.gsup.codec.GsupMessageEncoder;
 
 public class GsupClient {
     private final EventLoopGroup ioGroup = new NioEventLoopGroup(1); // one channel, one session

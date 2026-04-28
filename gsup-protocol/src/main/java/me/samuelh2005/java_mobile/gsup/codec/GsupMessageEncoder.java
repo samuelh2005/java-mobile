@@ -14,7 +14,7 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
     private final int streamId;
 
     public GsupMessageEncoder() {
-        this(0xEE); // Osmocom default for GSUP over IPA
+        this(0xEE); // Osmocom GSUP protocol stream ID over IPA
     }
 
     public GsupMessageEncoder(int streamId) {
