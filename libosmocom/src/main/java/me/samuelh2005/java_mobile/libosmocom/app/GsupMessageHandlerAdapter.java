@@ -2,6 +2,7 @@ package me.samuelh2005.java_mobile.libosmocom.app;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import me.samuelh2005.java_mobile.libosmocom.gsup.RawGsupMessage;
 
 public class GsupMessageHandlerAdapter extends ChannelInboundHandlerAdapter {
     
@@ -24,8 +25,8 @@ public class GsupMessageHandlerAdapter extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if (msg instanceof GsupMessage) {
-            handler.messageReceived(ctx, (GsupMessage) msg);
+        if (msg instanceof RawGsupMessage) {
+            handler.messageReceived(ctx, (RawGsupMessage) msg);
         } else {
             ctx.fireChannelRead(msg);
         }

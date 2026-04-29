@@ -3,13 +3,12 @@ package me.samuelh2005.java_mobile.libosmocom.gsup;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
-import me.samuelh2005.java_mobile.libosmocom.app.GsupMessage;
 import me.samuelh2005.java_mobile.libosmocom.gsup.ieis.IEIType;
 import me.samuelh2005.java_mobile.libosmocom.ipa.IpaFrame;
 import io.netty.handler.codec.EncoderException;
 import java.util.List;
 
-public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessage> {
+public final class GsupMessageEncoder extends MessageToMessageEncoder<RawGsupMessage> {
 
     private final int streamId;
     private final int proto;
@@ -24,7 +23,7 @@ public final class GsupMessageEncoder extends MessageToMessageEncoder<GsupMessag
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, GsupMessage msg, List<Object> out) {
+    protected void encode(ChannelHandlerContext ctx, RawGsupMessage msg, List<Object> out) {
         Object[] ieis = msg.ieis() == null ? new Object[0] : msg.ieis();
 
         int size = 1;

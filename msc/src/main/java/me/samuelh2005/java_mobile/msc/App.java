@@ -4,7 +4,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import me.samuelh2005.java_mobile.libosmocom.app.GsupClient;
 import me.samuelh2005.java_mobile.libosmocom.app.GsupHandler;
-import me.samuelh2005.java_mobile.libosmocom.app.GsupMessage;
+import me.samuelh2005.java_mobile.libosmocom.gsup.RawGsupMessage;
 import me.samuelh2005.java_mobile.libosmocom.gsup.ieis.IEIType;
 import me.samuelh2005.java_mobile.libosmocom.gsup.ieis.ImsiIEI;
 
@@ -43,7 +43,7 @@ public class App implements GsupHandler {
     }
     
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, GsupMessage msg) {
+    public void messageReceived(ChannelHandlerContext ctx, RawGsupMessage msg) {
         int type = msg.messageType();
         
         System.out.println("Received message type: 0x" + Integer.toHexString(type));
@@ -79,7 +79,7 @@ public class App implements GsupHandler {
         ImsiIEI imsiIEI = new ImsiIEI(imsi);
         Object[] ieis = new Object[] { imsiIEI };
         
-        GsupMessage authRequest = new GsupMessage(0x08, ieis);
+        RawGsupMessage authRequest = new RawGsupMessage(0x08, ieis);
         
         client.send(authRequest);
         

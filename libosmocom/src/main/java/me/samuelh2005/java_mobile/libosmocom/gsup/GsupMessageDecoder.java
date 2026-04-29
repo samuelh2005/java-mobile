@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import me.samuelh2005.java_mobile.libosmocom.app.GsupMessage;
 import me.samuelh2005.java_mobile.libosmocom.gsup.ieis.IEIType;
 import me.samuelh2005.java_mobile.libosmocom.ipa.IpaFrame;
 
@@ -40,6 +39,6 @@ public final class GsupMessageDecoder extends MessageToMessageDecoder<IpaFrame> 
             ieis.add(IEIType.decode(code, value));
         }
 
-        out.add(new GsupMessage(messageType, ieis.toArray()));
+        out.add(new RawGsupMessage(messageType, ieis.toArray()));
     }
 }

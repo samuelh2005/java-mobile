@@ -1,6 +1,7 @@
 package me.samuelh2005.java_mobile.libosmocom.app;
 
 import io.netty.channel.ChannelHandlerContext;
+import me.samuelh2005.java_mobile.libosmocom.gsup.RawGsupMessage;
 
 /**
  * Handler interface for incoming GSUP messages.
@@ -14,7 +15,7 @@ public interface GsupHandler {
      * @param ctx the channel handler context
      * @param msg the received GsupMessage
      */
-    void messageReceived(ChannelHandlerContext ctx, GsupMessage msg);
+    void messageReceived(ChannelHandlerContext ctx, RawGsupMessage msg);
     
     /**
      * Called when the channel becomes active (connected to HLR).

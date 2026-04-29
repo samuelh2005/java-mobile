@@ -17,6 +17,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import me.samuelh2005.java_mobile.libosmocom.gsup.RawGsupMessage;
 import me.samuelh2005.java_mobile.libosmocom.gsup.GsupMessageDecoder;
 import me.samuelh2005.java_mobile.libosmocom.gsup.GsupMessageEncoder;
 import me.samuelh2005.java_mobile.libosmocom.ipa.IpaFrameDecoder;
@@ -109,7 +110,7 @@ public class GsupClient {
         ioGroup.next().schedule(() -> connect(host, port), 5, TimeUnit.SECONDS);
     }
 
-    public void send(GsupMessage msg) {
+    public void send(RawGsupMessage msg) {
         Channel ch = channel;
         if (ch == null || !ch.isActive()) {
             throw new IllegalStateException("GSUP channel is not connected");
