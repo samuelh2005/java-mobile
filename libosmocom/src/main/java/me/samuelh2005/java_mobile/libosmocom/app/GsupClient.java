@@ -1,8 +1,9 @@
 package me.samuelh2005.java_mobile.libosmocom.app;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -26,10 +27,9 @@ import me.samuelh2005.java_mobile.libosmocom.ipa.ccm.IpaCcmIdentity;
 public class GsupClient {
     private final EventLoopGroup ioGroup = new NioEventLoopGroup(1); // one channel, one session
     private final Bootstrap bootstrap = new Bootstrap();
-    private final Queue<GsupMessage> pendingMessages = new ConcurrentLinkedQueue<>();
 
     private volatile Channel channel;
-    private volatile boolean ccmReady;
+    private volatile CompletableFuture<Void> handshakeFuture;
 
     public GsupClient(GsupHandler handler) {
         this(handler, IpaCcmIdentity.defaultIdentity());
@@ -49,11 +49,12 @@ public class GsupClient {
                           p.addLast(new ChannelInboundHandlerAdapter() {
                               @Override
                               public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-                                  ccmReady = false;
+                                  channel = null;
+                                  failHandshake(new IllegalStateException("Channel closed before CCM handshake completed"));
                                   super.channelInactive(ctx);
                               }
                           });
-                          p.addLast(new IpaCcmClientHandler(identity, GsupClient.this::markCcmReady));
+                          p.addLast(new IpaCcmClientHandler(identity, GsupClient.this::onHandshakeSignal));
                           p.addLast(new GsupMessageDecoder());
                           p.addLast(new GsupMessageEncoder());
                           p.addLast(new GsupMessageHandlerAdapter(handler));
@@ -62,13 +63,45 @@ public class GsupClient {
     }
 
     public ChannelFuture connect(String host, int port) {
-        return bootstrap.connect(host, port).addListener((ChannelFuture f) -> {
+        CompletableFuture<Void> handshake = new CompletableFuture<>();
+        handshakeFuture = handshake;
+
+        ChannelFuture future = bootstrap.connect(host, port).addListener((ChannelFuture f) -> {
             if (f.isSuccess()) {
                 channel = f.channel();
             } else {
+                failHandshake(f.cause() != null ? f.cause() : new IllegalStateException("connect failed"));
                 scheduleReconnect(host, port);
             }
         });
+
+        future.awaitUninterruptibly();
+        if (!future.isSuccess()) {
+            handshakeFuture = null;
+            return future;
+        }
+
+        try {
+            handshake.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while waiting for CCM handshake", e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException("CCM handshake failed", e.getCause());
+        } catch (TimeoutException e) {
+            Channel ch = channel;
+            if (ch != null) {
+                ch.close().awaitUninterruptibly();
+            }
+            scheduleReconnect(host, port);
+            throw new IllegalStateException("Timed out waiting for CCM handshake", e);
+        } finally {
+            if (handshakeFuture == handshake) {
+                handshakeFuture = null;
+            }
+        }
+
+        return future;
     }
 
     private void scheduleReconnect(String host, int port) {
@@ -78,32 +111,30 @@ public class GsupClient {
 
     public void send(GsupMessage msg) {
         Channel ch = channel;
-        if (ch != null && ch.isActive() && ccmReady) {
-            ch.writeAndFlush(msg);
-            return;
+        if (ch == null || !ch.isActive()) {
+            throw new IllegalStateException("GSUP channel is not connected");
         }
-
-        pendingMessages.add(msg);
+        ch.writeAndFlush(msg);
     }
 
     public void shutdown() {
         ioGroup.shutdownGracefully();
     }
 
-    private void markCcmReady() {
-        ccmReady = true;
-        flushPendingMessages();
-    }
-
-    private void flushPendingMessages() {
-        Channel ch = channel;
-        if (ch == null || !ch.isActive() || !ccmReady) {
+    private void onHandshakeSignal(Throwable cause) {
+        CompletableFuture<Void> handshake = handshakeFuture;
+        if (handshake == null || handshake.isDone()) {
             return;
         }
 
-        GsupMessage msg;
-        while ((msg = pendingMessages.poll()) != null) {
-            ch.writeAndFlush(msg);
+        if (cause == null) {
+            handshake.complete(null);
+        } else {
+            handshake.completeExceptionally(cause);
         }
+    }
+
+    private void failHandshake(Throwable cause) {
+        onHandshakeSignal(cause);
     }
 }
