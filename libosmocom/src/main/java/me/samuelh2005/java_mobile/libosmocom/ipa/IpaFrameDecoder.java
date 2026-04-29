@@ -21,12 +21,19 @@ public final class IpaFrameDecoder extends ByteToMessageDecoder {
             int streamId = in.readUnsignedByte();
             int proto = in.readUnsignedByte();
 
-            if (in.readableBytes() < payloadLen) {
+            if (payloadLen == 0) {
                 in.resetReaderIndex();
                 return;
             }
 
-            ByteBuf payload = in.readRetainedSlice(payloadLen);
+            int bodyLen = payloadLen - 1;
+
+            if (in.readableBytes() < bodyLen) {
+                in.resetReaderIndex();
+                return;
+            }
+
+            ByteBuf payload = in.readRetainedSlice(bodyLen);
             out.add(new IpaFrame(streamId, proto, payload));
         }
     }
