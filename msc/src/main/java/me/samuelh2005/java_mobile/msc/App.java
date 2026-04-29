@@ -2,11 +2,11 @@ package me.samuelh2005.java_mobile.msc;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
-import me.samuelh2005.java_mobile.gsup.GsupClient;
-import me.samuelh2005.java_mobile.gsup.GsupHandler;
-import me.samuelh2005.java_mobile.gsup.GsupMessage;
-import me.samuelh2005.java_mobile.gsup.ieis.ImsiIEI;
-import me.samuelh2005.java_mobile.gsup.ieis.IEIType;
+import me.samuelh2005.java_mobile.libosmocom.app.GsupClient;
+import me.samuelh2005.java_mobile.libosmocom.app.GsupHandler;
+import me.samuelh2005.java_mobile.libosmocom.app.GsupMessage;
+import me.samuelh2005.java_mobile.libosmocom.gsup.ieis.IEIType;
+import me.samuelh2005.java_mobile.libosmocom.gsup.ieis.ImsiIEI;
 
 public class App implements GsupHandler {
     

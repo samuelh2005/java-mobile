@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.netty.all)
     implementation(libs.slf4j.api)
     implementation(libs.logback.classic)
-    implementation(project(":gsup-protocol"))
+    implementation(project(":libosmocom"))
 }
 
 java {

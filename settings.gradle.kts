@@ -3,5 +3,5 @@ plugins {
 }
 
 rootProject.name = "java-mobile"
-include("gsup-protocol")
+include("libosmocom")
 include("msc")
