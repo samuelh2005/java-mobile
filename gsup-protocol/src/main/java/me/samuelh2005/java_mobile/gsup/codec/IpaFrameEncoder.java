@@ -9,7 +9,7 @@ public final class IpaFrameEncoder extends MessageToByteEncoder<IpaFrame> {
     @Override
     protected void encode(ChannelHandlerContext ctx, IpaFrame msg, ByteBuf out) {
         int len = msg.payload().readableBytes();
-        out.writeShort(len);
+        out.writeShort(len+1); // we need to plus one as the payload also contains the protocol byte
         out.writeByte(msg.streamId());
         out.writeByte(msg.proto());
 
