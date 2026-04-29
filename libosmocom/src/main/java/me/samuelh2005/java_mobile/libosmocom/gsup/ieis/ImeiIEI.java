@@ -1,5 +1,7 @@
 package me.samuelh2005.java_mobile.libosmocom.gsup.ieis;
 
+import me.samuelh2005.java_mobile.libosmocom.primitive.BcdUtil;
+
 public record ImeiIEI(String imei) {
     public ImeiIEI {
         imei = imei == null ? "" : imei;

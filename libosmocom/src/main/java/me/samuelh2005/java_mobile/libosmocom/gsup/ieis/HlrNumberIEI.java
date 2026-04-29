@@ -1,5 +1,7 @@
 package me.samuelh2005.java_mobile.libosmocom.gsup.ieis;
 
+import me.samuelh2005.java_mobile.libosmocom.primitive.BcdUtil;
+
 public record HlrNumberIEI(String number) {
     public HlrNumberIEI {
         number = number == null ? "" : number;

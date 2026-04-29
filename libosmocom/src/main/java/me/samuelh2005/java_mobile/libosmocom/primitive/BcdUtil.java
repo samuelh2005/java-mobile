@@ -1,9 +1,9 @@
-package me.samuelh2005.java_mobile.libosmocom.gsup.ieis;
+package me.samuelh2005.java_mobile.libosmocom.primitive;
 
-final class BcdUtil {
+public final class BcdUtil {
     private BcdUtil() {}
 
-    static String decodeDigits(byte[] data, int offset) {
+    public static String decodeDigits(byte[] data, int offset) {
         if (data == null || offset < 0 || offset >= data.length) {
             return "";
         }
@@ -23,7 +23,7 @@ final class BcdUtil {
         return sb.toString();
     }
 
-    static byte[] encodeDigits(String value) {
+    public static byte[] encodeDigits(String value) {
         String digits = normalizeDigits(value);
         if (digits.isEmpty()) {
             return new byte[0];
@@ -48,7 +48,7 @@ final class BcdUtil {
         return result;
     }
 
-    static byte[] encodeDigitsWithPrefix(int prefix, String value) {
+    public static byte[] encodeDigitsWithPrefix(int prefix, String value) {
         byte[] digits = encodeDigits(value);
         if (digits.length == 0 && normalizeDigits(value).isEmpty()) {
             return new byte[0];

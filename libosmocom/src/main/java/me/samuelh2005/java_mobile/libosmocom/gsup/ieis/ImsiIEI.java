@@ -1,5 +1,7 @@
 package me.samuelh2005.java_mobile.libosmocom.gsup.ieis;
 
+import me.samuelh2005.java_mobile.libosmocom.primitive.BcdUtil;
+
 public record ImsiIEI(String value) {
     public ImsiIEI {
         value = value == null ? "" : value;

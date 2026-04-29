@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import me.samuelh2005.java_mobile.libosmocom.primitive.BcdUtil;
+
 class BcdUtilTest {
     @Test
     void encodesImsiLikeOsmocom() {
